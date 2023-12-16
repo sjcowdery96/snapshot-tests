@@ -1,23 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import MyGitHubCard from './components/GitHubCard';
 
 function App() {
+  //gets my github info
+  const [myGitName, getGitName] = useState('')
+  const [myGitUrl, getGitURL] = useState('')
+  const [myGitFace, getGitFace] = useState('')
+  const [myGitBio, getGitBio] = useState('')
+  //creates our useEffect to fetch once and never againg -- empty dependency array
+  useEffect(() => {
+    fetch('https://api.github.com/users/sjcowdery96')
+      .then(res => res.json())
+      .then(data => {
+        getGitName(data.name)
+        getGitURL(data.html_url)
+        getGitFace(data.avatar_url)
+        getGitBio(data.bio)
+      })
+
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <MyGitHubCard myBio={myGitBio} myName={myGitName} myface={myGitFace} myURL={myGitUrl}></MyGitHubCard>
     </div>
   );
 }
